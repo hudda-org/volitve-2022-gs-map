@@ -287,6 +287,10 @@
             // Dynamically set fill color based on the number of votes for each party
             const okrajName = properties['Ime Okraja:'].replace("Volilni okraj ", "")
             const {leadingParty} = getLeaderPartyForArea(okrajName);
+            if (!leadingParty) {
+                console.log(okrajName)
+            }
+            // console.log(leadingParty)
             return {
                 pane: 'pane_SVN_dz_okraji_1',
                 opacity: 1,

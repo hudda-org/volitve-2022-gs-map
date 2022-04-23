@@ -71,7 +71,7 @@ function getVotingResults(callback) {
 function getResultsByAreaName(areaName) {
     for (let i = 0; i < rezultati.enote.length; i++) {
         const enota = rezultati.enote[i]
-        const okraj = enota.okraji.find(okraj => okraj.naz === areaName);
+        const okraj = enota.okraji.find(okraj => okraj.naz.toLowerCase() === areaName.toLowerCase());
         if (okraj) {
             return okraj.rez;
         }
@@ -88,7 +88,7 @@ function getLeaderPartyForArea(areaName) {
         return {};
     }
     const leaderResults = results.sort((a, b) => b.gl - a.gl)[0];
-    const leadingParty = parties.find(party => party.st === leaderResults.st);
+    const leadingParty = parties.find(party => party.st == leaderResults.st);
     return {leaderResults, leadingParty};
 }
 
@@ -98,7 +98,7 @@ function getPartyResultsByAreaName(partyShortName, areaName) {
     if (!results) return null;
 
     const partyResults = results.filter(result => {
-        return result.st === party.st;
+        return result.st == party.st;
     });
 
     if (!partyResults || partyResults.length === 0) return null;
