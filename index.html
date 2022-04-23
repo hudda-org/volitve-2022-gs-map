@@ -252,7 +252,10 @@
 
         
         function pop_SVN_dz_okraji_1(feature, layer) {
-            const results = getPartyResultsByAreaName(mainParty.shortName, feature.properties['Ime Okraja:'].replace("Volilni okraj ", ""));
+            const areaName = feature.properties['Ime Okraja:'].replace("Volilni okraj ", "");
+            const areaParticipationInfo = getParticipationForArea(areaName);
+            const results = getPartyResultsByAreaName(mainParty.shortName, areaName);
+            console.log(areaParticipationInfo)
             var popupContent = `<table>
                     <tr>
                         <th scope="row">ID Okraja:</th>
@@ -267,16 +270,16 @@
                         <td>${ (feature.properties['Kandidat GS:'] !== null ? autolinker.link(feature.properties['Kandidat GS:'].toLocaleString()) : '') }</td>
                     </tr>
                     <tr>
-                        <th scope="row">Opis kandidata:</th>
-                        <td>${ (feature.properties['Opis kandidata:'] !== null ? autolinker.link(feature.properties['Opis kandidata:'].toLocaleString()) : '') }</td>
-                    </tr>
-                    <tr>
                         <th scope="row">Št. glasov GS:</th>
                         <td>${results?.gl}</td>
                     </tr>
                     <tr>
                         <th scope="row">Delež glasov GS:</th>
                         <td>${(results?.prc*100).toFixed(1)} % </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Volilna udeležba:</th>
+                        <td>${(areaParticipationInfo?.prc*100).toFixed(1)} % </td>
                     </tr>
                 </table>`;
 
@@ -339,8 +342,8 @@
 
         var layer_SVN_dz_okraji_1, layer_SVN_dz_veSVN_dz_volilne_enote_2;
 
-        getVotingResults((votes) => {
-            console.log(votes)
+        getVotingResults((votes, udelezba) => {
+            console.log(votes, udelezba)
             layer_SVN_dz_okraji_1 = new L.geoJson(json_SVN_dz_okraji_1, {
                 attribution: 'GURS',
                 interactive: true,

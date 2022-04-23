@@ -1,4 +1,5 @@
 let rezultati = [];
+let udelezba = [];
 let parties = [];
 
 // const mainParty = {
@@ -59,22 +60,39 @@ const partiesColors = [
     }
 ];
 
-function getVotingResults(callback) {
-    fetch('https://gs-volitve.herokuapp.com/dev')
-        .then(response => response.json())
-        .then(data => {
-            rezultati = data;
-            parties = data.slovenija;
-            callback(data)})
+async function getVotingResults(callback) {
+
+    let [glasoviResponse, udelezbaResponse] = await Promise.all([
+        fetch('https://gs-volitve.herokuapp.com/glasovi/dev'),
+        fetch('https://gs-volitve.herokuapp.com/udelezba/dev')
+    ]);
+
+    [rezultati, udelezba] = await Promise.all([
+        glasoviResponse.json(),
+        udelezbaResponse.json(),
+    ]);
+
+    parties = rezultati.slovenija;
+
+    callback(rezultati, udelezba);
+
+}
+
+function getAreaByName(areaName) {
+    for (let i = 0; i < rezultati.enote.length; i++) {
+        const enota = rezultati.enote[i];
+        const okraj = enota.okraji.find(okraj => okraj.naz.toLowerCase() === areaName.toLowerCase());
+        if (okraj) {
+            return okraj;
+        }
+    }
 }
 
 function getResultsByAreaName(areaName) {
-    for (let i = 0; i < rezultati.enote.length; i++) {
-        const enota = rezultati.enote[i]
-        const okraj = enota.okraji.find(okraj => okraj.naz.toLowerCase() === areaName.toLowerCase());
-        if (okraj) {
-            return okraj.rez;
-        }
+    const area = getAreaByName(areaName);
+
+    if (area) {
+        return area.rez;
     }
 }
 
@@ -104,4 +122,14 @@ function getPartyResultsByAreaName(partyShortName, areaName) {
     if (!partyResults || partyResults.length === 0) return null;
 
     return partyResults[0];
+}
+
+function getParticipationForArea(areaName) {
+    for (let i = 0; i < udelezba.enote.length; i++) {
+        const enota = udelezba.enote[i];
+        const okraj = enota.okraji.find(okraj => okraj.naz.toLowerCase() === areaName.toLowerCase());
+        if (okraj) {
+            return okraj;
+        }
+    }
 }
