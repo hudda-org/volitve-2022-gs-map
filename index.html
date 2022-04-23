@@ -255,7 +255,6 @@
             const areaName = feature.properties['Ime Okraja:'].replace("Volilni okraj ", "");
             const areaParticipationInfo = getParticipationForArea(areaName);
             const results = getPartyResultsByAreaName(mainParty.shortName, areaName);
-            console.log(areaParticipationInfo)
             var popupContent = `<table>
                     <tr>
                         <th scope="row">ID Okraja:</th>
