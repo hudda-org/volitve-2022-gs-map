@@ -63,8 +63,8 @@ const partiesColors = [
 async function getVotingResults(callback) {
 
     let [glasoviResponse, udelezbaResponse] = await Promise.all([
-        fetch('https://gs-volitve.herokuapp.com/glasovi/dev'),
-        fetch('https://gs-volitve.herokuapp.com/udelezba/dev')
+        fetch('https://gs-volitve.herokuapp.com/glasovi'),
+        fetch('https://gs-volitve.herokuapp.com/udelezba')
     ]);
 
     [rezultati, udelezba] = await Promise.all([

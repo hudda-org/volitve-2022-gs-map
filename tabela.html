@@ -107,6 +107,10 @@
         },
         mounted() {
             this.getVotingData();
+
+            setInterval(() => {
+                this.getVotingData();
+            },30*1000)
         },
         computed: {
             sortedParties() {
