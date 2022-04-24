@@ -114,7 +114,7 @@
         },
         computed: {
             sortedParties() {
-                return this.rezultati.slovenija.sort((a, b) => b.gl - a.gl);
+                return this.rezultati?.slovenija?.sort((a, b) => b.gl - a.gl);
             }
         },
         methods: {
